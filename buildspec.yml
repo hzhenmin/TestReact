@@ -1,0 +1,19 @@
+# This file determines what is run during your app build in AWS CodeBuild. If you have configured
+# signing for your builds, then this buildspec will also sign your app after building.
+
+# The CodeBuild instance executing this buildspec has permission to decrypt mobile application
+# signing secrets using the KMS key in your account. Avoid logging or transferring keystore secrets
+# outside of this instance.
+
+version: 0.1
+
+phases:
+  install:
+    commands:
+  build:
+    commands:
+      npm run build
+  post_build:
+    commands:
+      - aws s3 sync --acl public-read --delete --exclude assets/* build/ "s3://${BUCKET_NAME}"
+      - aws s3 sync --acl public-read --delete --cache-control "max-age=31536000" build/assets "s3://${BUCKET_NAME}/assets"
