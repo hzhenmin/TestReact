@@ -16,5 +16,4 @@ phases:
       npm run build
   post_build:
     commands:
-      - aws s3 sync --acl public-read --delete --exclude build/assets build/ "s3://${BUCKET_NAME}"
-      - aws s3 sync --acl public-read --delete --cache-control "max-age=31536000" build/assets "s3://${BUCKET_NAME}/assets"
+      - aws s3 sync --acl public-read --delete build/ "s3://${BUCKET_NAME}"
